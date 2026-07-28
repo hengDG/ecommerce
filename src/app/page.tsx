@@ -5,6 +5,7 @@ import {
   getProductsByCategory,
 } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
+import HomeSlider from "@/components/HomeSlider";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -76,6 +77,8 @@ export default async function CatalogPage({ searchParams }: PageProps) {
 
       {/* Main */}
       <div className="flex-1 min-w-0">
+        {!category && !search && <HomeSlider products={products} />}
+
         {/* Mobile category pills */}
         <div className="flex md:hidden gap-2 overflow-x-auto pb-2 mb-4">
           <Link
