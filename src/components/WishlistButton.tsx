@@ -1,18 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useFavorites } from "@/context/FavoriteContext";
 
 interface Props {
   productId: string;
 }
 
 export default function WishlistButton({ productId }: Props) {
-  const [wished, setWished] = useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const wished = isFavorite(productId);
 
   return (
     <button
-      aria-label="Add to wishlist"
-      onClick={() => setWished((w) => !w)}
+      aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
+      onClick={() => toggleFavorite(productId)}
       className="p-2 rounded-lg border border-gray-200 hover:border-green-400 transition-colors"
     >
       <svg

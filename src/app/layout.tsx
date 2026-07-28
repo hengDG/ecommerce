@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
+import { FavoriteProvider } from "@/context/FavoriteContext";
 import Header from "@/components/Header";
 
 const geistSans = Geist({
@@ -31,15 +32,17 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-gray-50 text-gray-900">
-        <CartProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <footer className="bg-white border-t border-gray-200 py-6 mt-8">
-            <div className="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500">
-              © {new Date().getFullYear()} TechShop. All rights reserved.
-            </div>
-          </footer>
-        </CartProvider>
+        <FavoriteProvider>
+          <CartProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <footer className="bg-white border-t border-gray-200 py-6 mt-8">
+              <div className="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500">
+                © {new Date().getFullYear()} TechShop. All rights reserved.
+              </div>
+            </footer>
+          </CartProvider>
+        </FavoriteProvider>
       </body>
     </html>
   );
