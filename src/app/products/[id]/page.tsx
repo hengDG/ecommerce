@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import AddToCartButton from "@/components/AddToCartButton";
 import WishlistButton from "@/components/WishlistButton";
+import ProductCard from "@/components/ProductCard";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -53,6 +54,17 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
   if (!product) notFound();
 
+  const relatedProducts = products
+    .filter(
+      (p) => p.id !== product.id && p.categorySlug === product.categorySlug,
+    )
+    .slice(0, 4);
+
+  const recommendedProducts =
+    relatedProducts.length > 0
+      ? relatedProducts
+      : products.filter((p) => p.id !== product.id).slice(0, 4);
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       {/* Breadcrumb */}
@@ -77,7 +89,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
           {/* Image panel */}
-          <div className="relative bg-gray-50 flex items-center justify-center min-h-80 md:min-h-[480px] p-8">
+          <div className="relative bg-gray-50 flex items-center justify-center min-h-80 md:min-h-120 p-8">
             <div className="relative w-full h-80 md:h-96">
               <Image
                 src={product.image}
@@ -208,6 +220,26 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {product.about}
           </p>
         </div>
+      )}
+
+      {/* Recommended products */}
+      {recommendedProducts.length > 0 && (
+        <section className="mt-6">
+          <div className="mb-4">
+            <h2 className="text-xl font-bold text-gray-900">
+              Recommended Products
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              You may also like these items
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {recommendedProducts.map((item) => (
+              <ProductCard key={item.id} product={item} />
+            ))}
+          </div>
+        </section>
       )}
     </div>
   );
